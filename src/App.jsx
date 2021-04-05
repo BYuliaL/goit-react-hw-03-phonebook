@@ -16,6 +16,20 @@ class App extends Component {
     ],
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem("contacts");
+    const parsedContacts = JSON.parse(contacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.components) {
+      localStorage.setItem("components", JSON.stringify(this.state.contacts));
+    }
+  }
+
   formSubmitHandler = ({ name, number }) => {
     const data = {
       id: shortid.generate(),
@@ -53,12 +67,6 @@ class App extends Component {
       contacts: prevState.contacts.filter(({ id }) => id !== contactId),
     }));
   };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState.components) {
-      localStorage.setItem("components", JSON.stringify(this.state.contacts));
-    }
-  }
 
   render() {
     const visibleContacts = this.getVisibleContacts();
